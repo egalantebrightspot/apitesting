@@ -1,0 +1,209 @@
+openapi: 3.0.3
+info:
+  title: Default Response Types
+  description: |-
+    A collection of reusable response types.
+    
+    The responses can be reused as-is, or used as patterns to design service-specific responses.
+    
+    Depends on 'common-datatypes.oas3.yaml'
+  version: 0.0.1-SNAPSHOT
+  contact:
+    email: guevara.aaron@mayo.edu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+
+paths:
+  { }
+
+components:
+
+
+  responses:
+
+    200_Void:
+      description: |
+        Success. 
+        Resource exists.
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+
+    201_Default:
+      description: |
+        Created successfully. 
+        Returns the location of the created resource.
+      headers:
+        Location:
+          schema:
+            type: string
+            format: uri
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+
+    204_Default:
+      description: |
+        Success, No Content
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+
+
+    400_Default:
+      description: |-
+        Bad request.
+        Input parameters are not valid; check the response body for details
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            errors:
+              - id: "ec47c079-b976-441c-a3c8-0c30d678fdca"
+                instance: "urn:myResource"
+                title: "Invalid request"
+                components:
+                  - instance: "param1"
+                    title: "Missing"
+                  - instance: "param2"
+                    title: "Invalid"
+                    detail: "must be > 0"
+    401_Default:
+      description: |-
+        Unauthorized (Unauthenticated).
+        Client identity cannot be established
+    403_Default:
+      description: |-
+        Forbidden.
+        Client does not have access to the required resource.
+        Check the return body, if present, for details about the required/missing entitlements
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            data: null
+            errors:
+              - id: "c3c60965-8aad-4e51-af72-6074a181323f"
+                instance: "urn:myResource"
+                title: "Access denied"
+                detail: "Requested: write; Allowed: read"
+    405_Default:
+      description: |-
+        Method not allowed.
+        Server does not allow this 'verb' on this resource, but other verbs may be allowed
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            data: null
+            errors:
+              - id: "c3c60965-8aad-4e51-af72-6074a181323f"
+                instance: "urn:myResource"
+                title: "DELETE denied"
+                detail: "GET, POST allowed"
+
+
+    404_Default:
+      description: |-
+        Not found.
+        Servers may return a link to a list of available resources,
+        and/or reasons why the requested resource was not found
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            data: null
+            errors:
+              - id: "c3c60965-8aad-4e51-af72-6074a181323f"
+                instance: "myResouce"
+                title: "Not found"
+                detail: "Possible typo in the path/filter parameters"
+            links:
+              - related:
+                  - href: "http://server.url/availableResources"
+    409_Default:
+      description: |-
+        Conflict.
+        Check the response body for details
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            data: null
+            errors:
+              - id: "ec47c079-b976-441c-a3c8-0c30d678fdca"
+                instance: "urn:myResource"
+                title: "Conflict"
+                components:
+                  - instance: "property1"
+                    title: "Diff"
+                    detail: "Client = A, but Server = B"
+
+    410_Default:
+      description: |-
+        Gone.
+        Servers may return links to alternative resources
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            data: null
+            errors:
+              - title: "Gone"
+            links:
+              - related:
+                  - href: "http://server.url/availableResources"
+
+    500_Default:
+      description: |-
+        Internal Error. 
+        Check the return body, if present, for a more detailed explanation
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            data: null
+            errors:
+              - id: "5d74c7c3-bc3b-41b2-8c1c-04a2c210dcc3"
+                instance: "urn:myResource"
+                title: "Something went wrong"
+                detail: "Here is how..."
+                type: "urn:IllegalState"
+                status: "500"
+                severity: "ERR"
+    501_Default:
+      description: |-
+        The method has not been implemented.
+        If possible, return a link to a resource that describes the server's capabilities
+      content:
+        application/json:
+          x-mc-generics: null
+          schema:
+            $ref: './common-datatypes.oas3.yaml#/components/schemas/Answer'
+          example:
+            data: null
+            links:
+              - related:
+                  - href: "http://server.url/capabilities"
+

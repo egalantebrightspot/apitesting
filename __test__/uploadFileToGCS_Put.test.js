@@ -6,7 +6,9 @@ const { SecretManagerServiceClient } = require("@google-cloud/secret-manager");
 const {
   uploadFileToGCS_Put_Service,
 } = require("../Services/uploadFileToGCS_Put");
-const { mockKeyFile: mockKeyConfig } = require("../mocConfig");
+const { mockKeyFile: mockKeyConfig } = require("../../mocConfig");
+const developmentConfig = require("../../config/developments");
+
 
 jest.mock("config");
 jest.mock("@google-cloud/secret-manager");
@@ -16,8 +18,8 @@ jest.mock("debug", () => jest.fn(() => jest.fn()));
 describe("uploadFileToGCS_Put_Service", () => {
   const mockConfig = {
     secretResourceNameForServiceAccountKeyContentsForAccessingGcpBucket:
-      "../latest",
-    bucketName: "my-bucket",
+      developmentConfig.secretResourceNameForServiceAccountKeyContentsForAccessingGcpBucket,
+    bucketName: developmentConfig.bucketName,
   };
 
   const mockKeyFile = mockKeyConfig;
